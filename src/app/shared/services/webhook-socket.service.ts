@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiPayload, ApiResponse } from '../models/apiResponse';
+import { ApiPayload, ApiResponse } from '../../holdings/models/apiResponse';
 import { WebSocketSubject } from 'rxjs/internal-compatibility';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';

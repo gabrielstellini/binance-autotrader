@@ -3,9 +3,9 @@
 
   <app-fiat-holdings [apiData]="apiData" [hideZeroBalances]="hideZeroBalances"></app-fiat-holdings>
 
-  <div class="setting-header">
+  <div class="coin-header">
     <h1>Your Coins in the Spot Wallet:</h1>
-    <mat-checkbox class="example-margin" [(ngModel)]="hideZeroBalances">Hide 0 balances</mat-checkbox>
+    <mat-checkbox [(ngModel)]="hideZeroBalances">Hide 0 balances</mat-checkbox>
   </div>
 
   <app-coin-holdings [apiData]="apiData" [hideZeroBalances]="hideZeroBalances"></app-coin-holdings>

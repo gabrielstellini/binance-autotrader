@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ApiResponse } from '../../models/apiResponse';
+import { ApiResponse } from '../../holdings/models/apiResponse';
 import { Subject } from 'rxjs';
-import { LiveDataService } from '../../services/live-data.service';
+import { LiveDataService } from '../../shared/services/live-data.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

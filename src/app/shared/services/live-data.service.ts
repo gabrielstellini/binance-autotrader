@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WebhookSocketService } from './webhook-socket.service';
 import { Observable, Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ApiResponse } from '../models/apiResponse';
+import { ApiResponse } from '../../holdings/models/apiResponse';
 
 @Injectable({
   providedIn: 'root'

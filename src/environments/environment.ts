@@ -6,4 +6,4 @@ export const environment: EnvironmentModel = {
   reconnectInterval: 2000
 };
 
-import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

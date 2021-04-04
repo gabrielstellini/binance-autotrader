@@ -1,4 +1,4 @@
-import { ApiResponse } from '../models/apiResponse';
+import { ApiResponse } from '../../holdings/models/apiResponse';
 
 export const mockData: ApiResponse = Object.freeze(
   {
