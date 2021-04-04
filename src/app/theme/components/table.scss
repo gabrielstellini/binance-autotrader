@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+}
+
+th {
+  user-select: none;
+  position: sticky
+}
+
+.image-td {
+  display: flex;
+
+  img {
+    max-width: 32px;
+    padding: 12px;
+  }
+}

@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Binance Auto Trader</span>
+    <app-theme-menu
+      [options]="themeOptions"
+      (themeChange)="themeChangeHandler($event)">
+    </app-theme-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+<ng-content></ng-content>
+</div>
