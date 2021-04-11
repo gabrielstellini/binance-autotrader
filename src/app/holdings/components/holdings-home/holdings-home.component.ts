@@ -1,8 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { LiveDataService } from '../../../shared/services/live-data.service';
+import { ApiResponse } from '../../../shared/models/apiResponse';
+import { AccountService } from '../../../shared/services/account.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ApiResponse } from '../../models/apiResponse';
 
 @Component({
   selector: 'app-holdings-home',
@@ -10,23 +10,17 @@ import { ApiResponse } from '../../models/apiResponse';
   styleUrls: ['./holdings-home.component.scss']
 })
 export class HoldingsHomeComponent implements OnDestroy {
-  public apiData?: ApiResponse;
+  public hasData = false;
   public hideZeroBalances = true;
-  public destroy$ = new Subject();
+  destroy$ = new Subject();
 
-  // TODO: Move to seperate module + pass data through
-
-  constructor(private liveDataService: LiveDataService) {
-    this.liveDataService.startPolling();
-    this.liveDataService.latestPollData.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe((data) => {
-        this.apiData = data;
-    });
+  constructor(private accountService: AccountService) {
+    accountService.apiResponse$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data) => this.hasData = !!data);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.liveDataService.close();
   }
 }

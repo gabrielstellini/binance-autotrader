@@ -1,18 +1,21 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { ApiResponse, PriceSymbol } from '../../../models/apiResponse';
+import { ApiResponse } from '../../../../shared/models/apiResponse';
 import { MatTableDataSource } from '@angular/material/table';
-import { FiatHolding } from '../../../models/view.model';
+import { FiatHolding, FiatTotals } from '../../../../shared/models/view.model';
+import { AccountService } from '../../../../shared/services/account.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-fiat-holdings',
   templateUrl: './fiat-holdings.component.html',
   styleUrls: ['./fiat-holdings.component.scss']
 })
-export class FiatHoldingsComponent implements AfterViewInit, OnChanges {
+export class FiatHoldingsComponent implements AfterViewInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
-  @Input() apiData?: ApiResponse;
   @Input() hideZeroBalances = true;
+
+  public apiData?: ApiResponse;
 
   holdingsTableData = new MatTableDataSource<FiatHolding>([] as FiatHolding[]);
   displayedColumns: string[] = [
@@ -23,22 +26,28 @@ export class FiatHoldingsComponent implements AfterViewInit, OnChanges {
     'total'
   ];
 
+  constructor(accountService: AccountService) {
+    combineLatest([
+      accountService.apiResponse$,
+      accountService.fiatTotals$
+    ]).subscribe(([apiData, totals]) => {
+      if (apiData && totals) {
+        this.holdingsTableData.data = this.transformData(apiData, totals);
+      } else {
+        this.holdingsTableData.data = [];
+      }
+    });
+
+  }
+
   ngAfterViewInit(): void {
     if (this.sort) {
       this.holdingsTableData.sort = this.sort;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.apiData) {
-      this.holdingsTableData.data = this.transformData(this.apiData);
-    }
-  }
-
-  public transformData(apiData: ApiResponse): FiatHolding[] {
+  public transformData(apiData: ApiResponse, totalsInvested: FiatTotals): FiatHolding[] {
     const fiats = apiData.configuration.supportFIATs;
-
-    const totalsInvested = this.calculateTotals(apiData.stats.symbols);
 
     const holdingsData: FiatHolding[] = apiData.common.accountInfo.balances
     .filter(balance => fiats.includes(balance.asset))
@@ -56,27 +65,5 @@ export class FiatHoldingsComponent implements AfterViewInit, OnChanges {
     });
 
     return holdingsData;
-  }
-
-
-  private calculateTotals(priceSymbols: PriceSymbol[]): { [key: string]: number } {
-    const totals: { [key: string]: number; } = {};
-
-    priceSymbols
-    .filter(currSymbol => currSymbol.baseAssetBalance.estimatedValue !== 0)
-    .map(currSymbol => ({
-      baseCurrency:  currSymbol.quoteAssetBalance.asset,
-      ...currSymbol.baseAssetBalance
-    }))
-    .forEach(balance => {
-      if (totals[balance.baseCurrency]) {
-        totals[balance.baseCurrency] = totals[balance.baseCurrency] + balance.estimatedValue;
-      }
-      else {
-        totals[balance.baseCurrency] = balance.estimatedValue;
-      }
-    });
-
-    return totals;
   }
 }

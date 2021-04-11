@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -18,6 +20,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
+    MatSidenavModule,
+    MatListModule
   ],
   imports: [
     CommonModule

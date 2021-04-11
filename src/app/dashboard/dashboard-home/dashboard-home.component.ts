@@ -1,8 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ApiResponse } from '../../holdings/models/apiResponse';
+import { ApiResponse } from '../../shared/models/apiResponse';
 import { Subject } from 'rxjs';
-import { LiveDataService } from '../../shared/services/live-data.service';
 import { takeUntil } from 'rxjs/operators';
+import { AccountService } from '../../shared/services/account.service';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -10,23 +10,21 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./dashboard-home.component.scss']
 })
 export class DashboardHomeComponent implements OnDestroy {
-  public apiData?: ApiResponse;
+  public hasData = false;
   public hideZeroBalances = true;
   public destroy$ = new Subject();
 
   // TODO: Move to seperate module + pass data through
 
-  constructor(private liveDataService: LiveDataService) {
-    this.liveDataService.startPolling();
-    this.liveDataService.latestPollData.pipe(
+  constructor(private accountService: AccountService) {
+    this.accountService.apiResponse$.pipe(
       takeUntil(this.destroy$)
     ).subscribe((data) => {
-      this.apiData = data;
+      this.hasData = !!data;
     });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.liveDataService.close();
   }
 }

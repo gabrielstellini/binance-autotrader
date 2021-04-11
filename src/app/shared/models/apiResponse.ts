@@ -23,7 +23,7 @@ export interface PriceSymbol {
   refreshAccountInfo: boolean;
   indicators: Indicators;
   symbolInfo: SymbolInfo;
-  openOrders: any[];
+  openOrders: OpenOrder[];
   action: string;
   baseAssetBalance: BaseAssetBalance;
   quoteAssetBalance: Balance;
@@ -31,26 +31,26 @@ export interface PriceSymbol {
   sell: Sell2;
 }
 
-interface Sell2 {
+export interface Sell2 {
   currentPrice: number;
   limitPrice: number;
-  lastBuyPrice?: number | null;
-  triggerPrice?: number | null;
-  difference?: number | null;
-  currentProfit?: number | null;
-  currentProfitPercentage?: number | null;
-  openOrders: any[];
+  lastBuyPrice?: number | undefined;
+  triggerPrice?: number | undefined;
+  difference?: number;
+  currentProfit?: number;
+  currentProfitPercentage?: number;
+  openOrders: OpenOrder[];
   processMessage: string;
   updatedAt: string;
 }
 
-interface Buy2 {
+export interface Buy2 {
   currentPrice: number;
   limitPrice: number;
   lowestPrice: number;
   triggerPrice: number;
   difference: number;
-  openOrders: any[];
+  openOrders: OpenOrder[];
   processMesage: string;
   updatedAt: string;
 }
@@ -62,6 +62,33 @@ interface BaseAssetBalance {
   total: number;
   estimatedValue: number;
   updatedAt: string;
+}
+
+export interface OpenOrder {
+  symbol: string;
+  orderId: number;
+  orderListId: number;
+  clientOrderId: string;
+  price: string;
+  origQty: string;
+  executedQty: string;
+  cummulativeQuoteQty: string;
+  status: string;
+  timeInForce: string;
+  type: string;
+  side: string;
+  stopPrice: string;
+  icebergQty: string;
+  time: number;
+  updateTime: number;
+  isWorking: boolean;
+  origQuoteOrderQty: string;
+  currentPrice: number;
+  updatedAt: string;
+  limitPrice: number;
+  limitPercentage: number;
+  differenceToExecute: number;
+  differenceToCancel: number;
 }
 
 interface SymbolInfo {
@@ -134,9 +161,9 @@ interface Balance2 {
   asset: string;
   free: string;
   locked: string;
-  total?: number | null;
-  updatedAt?: string | null;
-  estimatedValue?: number | null;
+  total?: number;
+  updatedAt?: string;
+  estimatedValue?: number;
 }
 
 interface Common {

@@ -1,1 +1,9 @@
-<h1></h1>
+<ng-container *ngIf="hasData">
+  <div class="checkbox-header">
+    <h1>Unrealized Profits and Losses</h1>
+    <mat-checkbox [(ngModel)]="hideZeroBalances">Hide 0 balances</mat-checkbox>
+  </div>
+  <app-pl-overview [hideZeroBalances]="hideZeroBalances"></app-pl-overview>
+
+<!--  <h1>Total unrealized profits and losses</h1>-->
+</ng-container>

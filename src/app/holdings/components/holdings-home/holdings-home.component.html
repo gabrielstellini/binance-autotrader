@@ -1,12 +1,12 @@
-<ng-container *ngIf="apiData">
+<ng-container *ngIf="hasData">
   <h1>Your Spot FIATs:</h1>
 
-  <app-fiat-holdings [apiData]="apiData" [hideZeroBalances]="hideZeroBalances"></app-fiat-holdings>
+  <app-fiat-holdings [hideZeroBalances]="hideZeroBalances"></app-fiat-holdings>
 
-  <div class="coin-header">
+  <div class="checkbox-header">
     <h1>Your Coins in the Spot Wallet:</h1>
     <mat-checkbox [(ngModel)]="hideZeroBalances">Hide 0 balances</mat-checkbox>
   </div>
 
-  <app-coin-holdings [apiData]="apiData" [hideZeroBalances]="hideZeroBalances"></app-coin-holdings>
+  <app-coin-holdings [hideZeroBalances]="hideZeroBalances"></app-coin-holdings>
 </ng-container>

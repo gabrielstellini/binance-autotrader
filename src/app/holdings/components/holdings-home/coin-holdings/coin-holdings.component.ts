@@ -1,18 +1,19 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { ApiResponse } from '../../../models/apiResponse';
+import { ApiResponse } from '../../../../shared/models/apiResponse';
 import { MatTableDataSource } from '@angular/material/table';
-import { CoinHolding } from '../../../models/view.model';
+import { CoinHolding, FiatTotals } from '../../../../shared/models/view.model';
 import { crptoCurrencies } from '../../../../../assets/data/cryptocurrencies';
+import { AccountService } from '../../../../shared/services/account.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-coin-holdings',
   templateUrl: './coin-holdings.component.html',
   styleUrls: ['./coin-holdings.component.scss']
 })
-export class CoinHoldingsComponent implements AfterViewInit, OnChanges {
+export class CoinHoldingsComponent implements AfterViewInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
-  @Input() apiData?: ApiResponse;
   @Input() hideZeroBalances = true;
 
   holdingsTableData = new MatTableDataSource([] as CoinHolding[]);
@@ -25,21 +26,32 @@ export class CoinHoldingsComponent implements AfterViewInit, OnChanges {
     'amountInFiat'
   ];
 
+  constructor(accountService: AccountService) {
+    combineLatest([
+      accountService.apiResponse$,
+      accountService.fiatTotals$
+    ]).subscribe(([apiData, totals]) => {
+      if (apiData && totals) {
+        this.holdingsTableData.data = this.transformData(apiData, totals);
+      } else {
+        this.holdingsTableData.data = [];
+      }
+    });
+
+  }
+
   ngAfterViewInit(): void {
     if (this.sort) {
       this.holdingsTableData.sort = this.sort;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.apiData) {
-      this.holdingsTableData.data = this.transformData(this.apiData);
-    }
-  }
-
-  public transformData(apiData: ApiResponse): CoinHolding[] {
-    const holdingsData: CoinHolding[] = apiData.stats.symbols.map(symbol => {
-      const totalBaseFiat = +symbol.quoteAssetBalance.free + +symbol.quoteAssetBalance.locked;
+  public transformData(apiData: ApiResponse, totalsInvested: FiatTotals): CoinHolding[] {
+    return apiData.stats.symbols
+    .map(symbol => {
+      const totalBaseFiat = +symbol.quoteAssetBalance.free +
+        +symbol.quoteAssetBalance.locked +
+        totalsInvested[symbol.quoteAssetBalance.asset];
       const coinKey = (symbol.baseAssetBalance.asset.toUpperCase()) as keyof typeof crptoCurrencies;
       const totalSymbolHolding = symbol.baseAssetBalance.total;
       const imageName = (coinKey + '.png').toLowerCase().replace('up', '').replace('down', '');
@@ -49,7 +61,6 @@ export class CoinHoldingsComponent implements AfterViewInit, OnChanges {
         icon: imageName,
         name: coinName,
         baseFiat: symbol.quoteAssetBalance.asset,
-        // TODO: Include invested in this total percentage
         percentage: symbol.baseAssetBalance.estimatedValue / totalBaseFiat,
         amountInCoin: totalSymbolHolding,
         amountInFiat: {
@@ -59,7 +70,5 @@ export class CoinHoldingsComponent implements AfterViewInit, OnChanges {
       };
       return rowData;
     });
-
-    return holdingsData;
   }
 }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LiveDataService } from './live-data.service';
+import { AccountService } from './account.service';
 
-describe('LiveDataService', () => {
-  let service: LiveDataService;
+describe('AccountService', () => {
+  let service: AccountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LiveDataService);
+    service = TestBed.inject(AccountService);
   });
 
   it('should be created', () => {
