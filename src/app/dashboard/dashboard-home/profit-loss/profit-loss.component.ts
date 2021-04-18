@@ -1,18 +1,18 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ApiResponse } from '../../../shared/models/apiResponse';
-import { combineLatest } from 'rxjs';
-import { AccountService } from '../../../shared/services/account.service';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FiatTotals, ProfitLoss } from '../../../shared/models/view.model';
+import { AccountService } from '../../../shared/services/account.service';
+import { combineLatest } from 'rxjs';
+import { ApiResponse } from '../../../shared/models/apiResponse';
 import { crptoCurrencies } from '../../../../assets/data/cryptocurrencies';
 
 @Component({
-  selector: 'app-pl-overview',
-  templateUrl: './pl-overview.component.html',
-  styleUrls: ['./pl-overview.component.scss']
+  selector: 'app-profit-loss',
+  templateUrl: './profit-loss.component.html',
+  styleUrls: ['./profit-loss.component.scss']
 })
-export class PlOverviewComponent implements OnInit {
+export class ProfitLossComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
   @Input() hideZeroBalances = true;
 

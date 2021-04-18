@@ -32,6 +32,13 @@ export interface ProfitLoss {
   };
 }
 
+export interface ProfitLossSummary {
+  icon: string;
+  name: string;
+  unrealizedProfit: number;
+  totalAmountInFiat: number;
+}
+
 export interface FiatTotals {
   [key: string]: number;
 }

@@ -1,0 +1,10 @@
+@import '../../../theme/components/table';
+@import "~@angular/material/theming";
+
+.warn {
+  color: mat-color($mat-amber, 800);
+}
+
+.mat-accent {
+  opacity: 0.3;
+}

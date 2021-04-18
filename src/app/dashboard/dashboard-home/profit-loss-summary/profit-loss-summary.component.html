@@ -1,0 +1,39 @@
+<table mat-table matSort [dataSource]="holdingsTableData"
+       mat-sort
+       matSortActive="profitLoss"
+       matSortDirection="desc"
+       matSortStart="desc">
+
+  <ng-container matColumnDef="icon">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" class="image-td">
+      <img *ngIf="element.icon.length"
+           [src]="'assets/icons/coins/' + element.icon"
+           appImgFallback="assets/icons/coins/fallback.png"
+           alt="coin icon"/>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Coin</th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="profitLoss">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="profitLoss">Profit/Loss</th>
+    <td mat-cell *matCellDef="let element" [class.warn]="element.unrealizedProfit < 0">
+      <ng-container>
+        {{element.unrealizedProfit | currency: element.name}}
+<!--        ({{element.sell.currentProfitPercentage | number: '1.2-2'}}%)-->
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="totalAmount">
+    <th mat-header-cell *matHeaderCellDef>Total Owned</th>
+    <td mat-cell *matCellDef="let element"> {{element.totalAmountInFiat | currency: element.name}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="row.totalAmountInFiat === 0 && hideZeroBalances"></tr>
+</table>
