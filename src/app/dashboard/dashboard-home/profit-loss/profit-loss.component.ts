@@ -6,17 +6,20 @@ import { AccountService } from '../../../shared/services/account.service';
 import { combineLatest } from 'rxjs';
 import { ApiResponse } from '../../../shared/models/apiResponse';
 import { crptoCurrencies } from '../../../../assets/data/cryptocurrencies';
+import { rowsAnimation } from '../../../shared/animations/template.animations';
 
 @Component({
   selector: 'app-profit-loss',
   templateUrl: './profit-loss.component.html',
-  styleUrls: ['./profit-loss.component.scss']
+  styleUrls: ['./profit-loss.component.scss'],
+  animations: [rowsAnimation]
 })
 export class ProfitLossComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
   @Input() hideZeroBalances = true;
 
   holdingsTableData = new MatTableDataSource([] as ProfitLoss[]);
+  expandedElement = {};
   displayedColumns: string[] = [
     'icon',
     'name',
@@ -38,7 +41,10 @@ export class ProfitLossComponent implements OnInit {
         this.holdingsTableData.data = [];
       }
     });
+  }
 
+  trackingFn(_index: number, item: ProfitLoss): string {
+    return item.icon + item.sell.currentProfit;
   }
 
   ngOnInit(): void {

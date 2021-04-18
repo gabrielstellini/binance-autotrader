@@ -1,4 +1,5 @@
 <table mat-table matSort [dataSource]="holdingsTableData"
+       [trackBy]="trackingFn"
        mat-sort
        matSortActive="profitLoss"
        matSortDirection="desc"
@@ -35,5 +36,9 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="row.totalAmountInFiat === 0 && hideZeroBalances"></tr>
+  <tr mat-row
+      [@rowsAnimation]=""
+      *matRowDef="let row; columns: displayedColumns;"
+      [hidden]="row.totalAmountInFiat === 0 && hideZeroBalances"
+  ></tr>
 </table>

@@ -5,12 +5,13 @@ import { FiatTotals, ProfitLossSummary } from '../../../shared/models/view.model
 import { AccountService } from '../../../shared/services/account.service';
 import { combineLatest } from 'rxjs';
 import { ApiResponse } from '../../../shared/models/apiResponse';
-import { crptoCurrencies } from '../../../../assets/data/cryptocurrencies';
+import { rowsAnimation } from '../../../shared/animations/template.animations';
 
 @Component({
   selector: 'app-profit-loss-summary',
   templateUrl: './profit-loss-summary.component.html',
-  styleUrls: ['./profit-loss-summary.component.scss']
+  styleUrls: ['./profit-loss-summary.component.scss'],
+  animations: [rowsAnimation]
 })
 export class ProfitLossSummaryComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
@@ -50,6 +51,10 @@ export class ProfitLossSummaryComponent implements OnInit {
         }
       };
     }
+  }
+
+  trackingFn(_index: number, item: ProfitLossSummary): string {
+    return item.name + item.unrealizedProfit;
   }
 
   public transformData(apiData: ApiResponse, totalsInvested: FiatTotals): ProfitLossSummary[] {
