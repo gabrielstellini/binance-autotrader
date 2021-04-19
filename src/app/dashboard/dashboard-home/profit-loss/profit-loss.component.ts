@@ -7,19 +7,28 @@ import { combineLatest } from 'rxjs';
 import { ApiResponse } from '../../../shared/models/apiResponse';
 import { crptoCurrencies } from '../../../../assets/data/cryptocurrencies';
 import { rowsAnimation } from '../../../shared/animations/template.animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-profit-loss',
   templateUrl: './profit-loss.component.html',
   styleUrls: ['./profit-loss.component.scss'],
-  animations: [rowsAnimation]
+  animations: [
+    rowsAnimation,
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ])
+  ]
 })
+
 export class ProfitLossComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) private sort?: MatSort;
   @Input() hideZeroBalances = true;
 
   holdingsTableData = new MatTableDataSource([] as ProfitLoss[]);
-  expandedElement = {};
+  expandedElement: string | null = null;
   displayedColumns: string[] = [
     'icon',
     'name',
@@ -29,6 +38,10 @@ export class ProfitLossComponent implements OnInit {
     'profitLoss',
     'totalAmount'
   ];
+
+  setExpandedElement(row: ProfitLoss): void {
+    this.expandedElement = this.expandedElement === row.name ? null : row.name;
+  }
 
   constructor(accountService: AccountService) {
     combineLatest([

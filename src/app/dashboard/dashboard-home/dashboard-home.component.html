@@ -1,12 +1,12 @@
 <div class="dashboard-home">
   <ng-container *ngIf="hasData">
+    <h1>Total unrealized profits and losses</h1>
+    <app-profit-loss-summary></app-profit-loss-summary>
+
     <div class="checkbox-header">
       <h1>Unrealized Profits and Losses</h1>
       <mat-checkbox [(ngModel)]="hideZeroBalances">Hide 0 balances</mat-checkbox>
     </div>
     <app-profit-loss [hideZeroBalances]="hideZeroBalances"></app-profit-loss>
-
-    <h1>Total unrealized profits and losses</h1>
-    <app-profit-loss-summary></app-profit-loss-summary>
   </ng-container>
 </div>

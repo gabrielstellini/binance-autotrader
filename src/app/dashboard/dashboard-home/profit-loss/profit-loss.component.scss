@@ -8,3 +8,33 @@
 .mat-accent {
   opacity: 0.3;
 }
+
+img {
+  user-select: none;
+}
+
+
+tr.main-row:not(.expanded):hover {
+  background: whitesmoke;
+}
+
+tr.main-row:not(.expanded):active {
+  background: #efefef;
+}
+
+.main-row td {
+  border-bottom-width: 0;
+}
+
+tr.expanded-detail {
+  height: 0;
+}
+
+.main-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}

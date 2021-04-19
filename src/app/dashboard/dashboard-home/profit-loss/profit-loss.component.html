@@ -1,5 +1,6 @@
 <table mat-table matSort [dataSource]="holdingsTableData"
        mat-sort
+       multiTemplateDataRows
        [trackBy]="trackingFn"
        matSortActive="profitLoss"
        matSortDirection="desc"
@@ -12,6 +13,16 @@
            [src]="'assets/icons/coins/' + element.icon"
            appImgFallback="assets/icons/coins/fallback.png"
            alt="coin icon"/>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+      <div class="example-element-detail"
+           [@detailExpand]="element.name == expandedElement ? 'expanded' : 'collapsed'">
+        <h1>Expanded!</h1>
+        <input>
+      </div>
     </td>
   </ng-container>
 
@@ -61,6 +72,13 @@
   <tr mat-row
       [@rowsAnimation]=""
       *matRowDef="let row; columns: displayedColumns;"
+      class="main-row"
+      [class.expanded]="expandedElement === row.name"
+      (click)="setExpandedElement(row)"
+      [hidden]="row.totalAmountInFiat.amount === 0 && hideZeroBalances"
+  ></tr>
+
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail"
       [hidden]="row.totalAmountInFiat.amount === 0 && hideZeroBalances"
   ></tr>
 </table>
