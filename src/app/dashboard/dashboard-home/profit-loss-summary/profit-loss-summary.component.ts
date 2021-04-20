@@ -61,8 +61,10 @@ export class ProfitLossSummaryComponent implements OnInit {
     const initialValue: { [currency: string]: ProfitLossSummary } = {};
 
     const transformedData = apiData.stats.symbols.reduce((acc, symbolData) => {
-      const currency = symbolData.quoteAssetBalance.asset === 'USDT' ? 'USD' : symbolData.quoteAssetBalance.asset;
+      const currency = symbolData.quoteAssetBalance.asset;
       const imageName = (currency + '.png').toLowerCase().replace('up', '').replace('down', '');
+      const currencyData = apiData.common.accountInfo.balances.find(balance => balance.asset === currency);
+      const total = currencyData ? +currencyData.free + +currencyData.locked : 0;
 
       return ({
         ...acc,
@@ -70,7 +72,7 @@ export class ProfitLossSummaryComponent implements OnInit {
           icon: imageName,
           name: currency,
           unrealizedProfit: (symbolData.sell?.currentProfit || 0) + (acc[currency]?.unrealizedProfit || 0),
-          totalAmountInFiat: totalsInvested[symbolData.quoteAssetBalance.asset]
+          totalAmountInFiat: totalsInvested[symbolData.quoteAssetBalance.asset] + total
         }
       });
     }, initialValue);
