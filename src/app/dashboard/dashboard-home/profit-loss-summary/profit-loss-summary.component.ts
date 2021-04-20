@@ -77,6 +77,7 @@ export class ProfitLossSummaryComponent implements OnInit {
       });
     }, initialValue);
 
+
     return Object.values(transformedData);
   }
 }
