@@ -32,8 +32,8 @@ jobs:
     - name: Build
       run: |
         npm install
-        npm run ng build -- --configuration=gabriel-production --output-path=/home/gabriel/Documents/myApps/binance/gabriel
-        npm run ng build -- --configuration=mario-production --output-path=/home/gabriel/Documents/myApps/binance/mario
+        npm run ng build -- --configuration=gabriel-production --base-href=/gabriel/ --output-path=/home/gabriel/Documents/myApps/binance/gabriel
+        npm run ng build -- --configuration=mario-production --base-href=/mario/ --output-path=/home/gabriel/Documents/myApps/binance/mario
   deploy:
     needs: build
     runs-on: [self-hosted, Linux]
